@@ -31,13 +31,22 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-option(GENERATE_TESTS "Build tests wth googletest" TRUE)
+option(GENERATE_TESTS "Build tests wth googletest")
 
 if(GENERATE_TESTS)
+    enable_testing()
+
     find_package(GTest REQUIRED)
     include_directories(${GTEST_INCLUDE_DIRS})
-    #target_link_libraries(testing_ws_unit_tests ${GTEST_BOTH_LIBRARIES})
-    enable_testing()
+
+    add_executable(testing_ws_unit_tests
+            src/engine.cpp src/engine.hpp
+            src/car.cpp src/car.hpp
+            test/car.cpp test/engine.cpp)
+
+    add_test(NAME sample_test_suite COMMAND testing_ws_unit_tests)
+
+    target_link_libraries(testing_ws_unit_tests ${GTEST_BOTH_LIBRARIES} pthread)
 endif()
 
 add_executable(testing_ws
