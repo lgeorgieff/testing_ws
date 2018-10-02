@@ -10,6 +10,8 @@ TEST(car, subclass_can_be_instantiated) {
   SUCCEED();
 }
 
+// TODO: test copy/move constructor/assignment
+
 TEST(car, constructor_sets_engine) {
   SUCCEED();
 }
