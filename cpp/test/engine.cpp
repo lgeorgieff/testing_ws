@@ -12,9 +12,9 @@ class engine_f : public ::testing::Test {
     return testing_sample::engine{horse_power};
   }
 
-  void SetUp() { ::testing::Test::SetUp(); }
+  void SetUp() override { ::testing::Test::SetUp(); }
 
-  void TearDown() { ::testing::Test::TearDown(); }
+  void TearDown() override { ::testing::Test::TearDown(); }
 }; // class engine_f
 
 TEST_F(engine_f, constructor_sets_horse_power) {
