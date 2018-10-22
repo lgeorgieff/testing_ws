@@ -45,8 +45,9 @@ if(GENERATE_TESTS)
             test/car.cpp test/engine.cpp)
 
     add_test(NAME sample_test_suite COMMAND testing_ws_unit_tests)
+    message(STATUS ${GTEST_BOTH_LIBRARIES})
 
-    target_link_libraries(testing_ws_unit_tests ${GTEST_BOTH_LIBRARIES} pthread)
+    target_link_libraries(testing_ws_unit_tests ${GTEST_BOTH_LIBRARIES} gmock pthread)
 endif()
 
 add_executable(testing_ws

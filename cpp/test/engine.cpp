@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include <utility>
+#include <stdexcept>
 
 const unsigned short default_horse_power{458};
 
@@ -19,25 +19,39 @@ class engine_f : public ::testing::Test {
 
 TEST_F(engine_f, constructor_sets_horse_power) {
   testing_sample::engine engine{default_horse_power};
-  EXPECT_EQ(default_horse_power, engine.horse_power());
+  EXPECT_EQ(engine.horse_power(), default_horse_power);
 }
 
 TEST_F(engine_f, copy_constructor_sets_horse_power) {
   testing_sample::engine engine{create_engine()};
-  EXPECT_EQ(default_horse_power, engine.horse_power());
+  EXPECT_EQ(engine.horse_power(), default_horse_power);
 }
 
 TEST_F(engine_f, move_constructor_sets_horse_power) {
   testing_sample::engine engine{std::move(create_engine())};
-  EXPECT_EQ(default_horse_power, engine.horse_power());
+  EXPECT_EQ(engine.horse_power(), default_horse_power);
 }
 
 TEST_F(engine_f, copy_assignment_sets_horse_power) {
   testing_sample::engine engine = create_engine();
-  EXPECT_EQ(default_horse_power, engine.horse_power());
+  EXPECT_EQ(engine.horse_power(), default_horse_power);
 }
 
 TEST_F(engine_f, move_assignment_sets_horse_power) {
   testing_sample::engine engine = std::move(create_engine());
-  EXPECT_EQ(default_horse_power, engine.horse_power());
+  EXPECT_EQ(engine.horse_power(), default_horse_power);
+}
+
+TEST_F(engine_f, equals_operator_returns_correct_value) {
+  auto engine1{create_engine()}, engine2{create_engine(0)}, engine3{create_engine()};
+  EXPECT_TRUE(engine1 == engine1);
+  EXPECT_TRUE(engine1 == engine3);
+  EXPECT_FALSE(engine1 == engine2);
+}
+
+TEST_F(engine_f, unequals_operator_returns_correct_value) {
+  auto engine1{create_engine()}, engine2{create_engine(0)}, engine3{create_engine()};
+  EXPECT_FALSE(engine1 != engine1);
+  EXPECT_FALSE(engine1 != engine3);
+  EXPECT_TRUE(engine1 != engine2);
 }

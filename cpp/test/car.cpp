@@ -1,57 +1,155 @@
 #include "../src/car.hpp"
+#include "../src/engine.hpp"
 
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
-TEST(car, cannot_be_instantiated) {
-  SUCCEED();
+#include <memory>
+#include <thread>
+#include <chrono>
+
+const auto ms_500{std::chrono::milliseconds{500}};
+const auto ms_1000{std::chrono::milliseconds{1000}};
+
+class engine_mock : public testing_sample::engine {
+ public:
+  engine_mock(float horse_power) noexcept :engine(horse_power) {}
+  MOCK_CONST_METHOD0(horse_power, unsigned short());
+}; // class engine_mock
+
+class car_mock : public testing_sample::car {
+ public:
+  car_mock(const testing_sample::engine &engine, float max_speed, float weight) noexcept
+    :car{engine, max_speed, weight} {}
+  virtual size_t vin() const noexcept override {
+    return 123;
+  }
+}; // class car_mock
+
+class car_f : public ::testing::Test {
+ public:
+  ~car_f() { TearDown(); }
+  void SetUp() {}
+  void TearDown() {}
+
+  static const float HORSE_POWER;
+  static const float MAX_SPEED;
+  static const float WEIGHT;
+
+  std::unique_ptr<testing_sample::engine> create_instance(float horse_power = HORSE_POWER) const {
+    return std::make_unique<engine_mock>(horse_power);
+  }
+
+  std::unique_ptr<testing_sample::car> create_instance(const testing_sample::engine &engine,
+      float max_speed = MAX_SPEED, float weight = WEIGHT) const {
+    return std::make_unique<car_mock>(engine, max_speed, weight);
+  }
+}; // class car_f
+
+const float car_f::HORSE_POWER = 323.0F;
+const float car_f::MAX_SPEED = 283.0F;
+const float car_f::WEIGHT = 1523.321F;
+
+TEST_F(car_f, subclass_can_be_instantiated) {
+  auto engine{create_instance()};
+  auto car{create_instance(*engine)};
+  EXPECT_TRUE(car);
 }
 
-TEST(car, subclass_can_be_instantiated) {
-  SUCCEED();
+TEST_F(car_f, constructor_sets_engine) {
+  auto engine{create_instance()};
+  auto car{create_instance(*engine)};
+  EXPECT_EQ(car->engine(), *engine);
 }
 
-// TODO: test copy/move constructor/assignment
-
-TEST(car, constructor_sets_engine) {
-  SUCCEED();
+TEST_F(car_f, constructor_sets_max_speed) {
+  auto car{create_instance(*create_instance())};
+  EXPECT_EQ(car->max_speed(), MAX_SPEED);
 }
 
-TEST(car, constructor_sets_max_speed) {
-  SUCCEED();
+TEST_F(car_f, constructor_sets_weight) {
+  auto car{create_instance(*create_instance())};
+  EXPECT_EQ(car->weight(), WEIGHT);
 }
 
-TEST(car, constructor_sets_weight) {
-  SUCCEED();
+TEST_F(car_f, speed_is_set) {
+  auto car{create_instance(*create_instance())};
+  EXPECT_FLOAT_EQ(car->speed(), 0.0F);
+  car->speed(123.43F);
+  EXPECT_FLOAT_EQ(car->speed(), 123.43F);
 }
 
-TEST(car, speed_sets_internal_value) {
-  SUCCEED();
+TEST_F(car_f, speed_only_allows_valid_values) {
+  auto car{create_instance(*create_instance())};
+  EXPECT_THROW(car->speed(-car->max_speed() - 0.1F), std::invalid_argument);
+  EXPECT_FLOAT_EQ(car->speed(), 0.0F);
+  EXPECT_THROW(car->speed(car->max_speed() + 0.1F), std::invalid_argument);
+  EXPECT_FLOAT_EQ(car->speed(), 0.0F);
 }
 
-TEST(car, speed_only_allows_valid_values) {
-  SUCCEED();
+TEST_F(car_f, is_driving_returns_valid_value) {
+  auto car{create_instance(*create_instance())};
+  EXPECT_FALSE(car->is_driving());
+  car->speed(1.0F);
+  EXPECT_TRUE(car->is_driving());
+  car->speed(0.0F);
+  EXPECT_FALSE(car->is_driving());
+  car->speed(-1.0F);
+  EXPECT_TRUE(car->is_driving());
+  car->speed(0.0F);
+  EXPECT_FALSE(car->is_driving());
 }
 
-TEST(car, is_driving_returns_valid_value) {
-  SUCCEED();
+TEST_F(car_f, horse_power_returns_value_from_engine) {
+  auto car{create_instance(*create_instance())};
+  EXPECT_EQ(car->horse_power(), HORSE_POWER);
 }
 
-TEST(car, horse_power_returns_value_from_engine) {
-  SUCCEED();
+TEST_F(car_f, average_speed_is_0_when_car_was_not_driving) {
+  auto car{create_instance(*create_instance())};
+  EXPECT_FLOAT_EQ(car->average_speed(), 0.0F);
 }
 
-TEST(car, average_speed_is_0_when_car_was_not_driving) {
-  SUCCEED();
+TEST_F(car_f, average_speed_is_updated_when_car_is_driving) {
+  auto car{create_instance(*create_instance())};
+  std::this_thread::sleep_for(ms_500);
+  EXPECT_FLOAT_EQ(car->average_speed(), 0.0F);
+  car->speed(100.0F);
+  std::this_thread::sleep_for(ms_500);
+  EXPECT_FLOAT_EQ(car->average_speed(), 100.0F);
+  car->speed(100.0F);
+  std::this_thread::sleep_for(ms_500);
+  EXPECT_FLOAT_EQ(car->average_speed(), 100.0F);
+  car->speed(200.0F);
+  std::this_thread::sleep_for(ms_1000);
+  EXPECT_NEAR(car->average_speed(), (100.0F + 100.0F + 200.0F + 200.0F) / 4.0F, 0.1F);
 }
 
-TEST(car, average_speed_is_updated_when_car_is_driving) {
-  SUCCEED();
+TEST_F(car_f, average_speed_is_not_updated_when_car_is_not_driving) {
+  auto car{create_instance(*create_instance())};
+  car->speed(100.0F);
+  std::this_thread::sleep_for(ms_500);
+  EXPECT_FLOAT_EQ(car->average_speed(), 100.0F);
+  car->speed(0.0F);
+  std::this_thread::sleep_for(ms_500);
+  EXPECT_FLOAT_EQ(car->average_speed(), 100.0F);
 }
 
-TEST(car, average_speed_is_nt_updated_when_car_is_not_driving) {
-  SUCCEED();
-}
-
-TEST(car, average_speed_is_updated_when_car_was_driving_and_stopping_multiple_times) {
-  SUCCEED();
+TEST_F(car_f, average_speed_is_updated_when_car_was_driving_and_stopping_multiple_times) {
+  auto car{create_instance(*create_instance())};
+  car->speed(100.0F);
+  std::this_thread::sleep_for(ms_500);
+  EXPECT_FLOAT_EQ(car->average_speed(), 100.0F);
+  car->speed(0.0F);
+  std::this_thread::sleep_for(ms_500);
+  EXPECT_FLOAT_EQ(car->average_speed(), 100.0F);
+  car->speed(200.0F);
+  std::this_thread::sleep_for(ms_500);
+  EXPECT_NEAR(car->average_speed(), (100.0F + 200.0F) / 2.0F, 0.1F);
+  car->speed(0.0F);
+  std::this_thread::sleep_for(ms_500);
+  EXPECT_NEAR(car->average_speed(), (100.0F + 200.0F) / 2.0F, 0.1F);
+  car->speed(car->max_speed());
+  std::this_thread::sleep_for(ms_500);
+  EXPECT_NEAR(car->average_speed(), (100.0F + 200.0F + car->max_speed()) / 3.0F, 0.1F);
 }

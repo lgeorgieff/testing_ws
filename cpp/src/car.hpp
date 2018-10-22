@@ -8,22 +8,22 @@
 namespace testing_sample {
 class car {
  public:
-  car(const engine &engine, float max_speed, float weight) noexcept;
+  car(const engine &engine, float max_speed, float weight);
   car(const car &) = default;
   car(car &&) = default;
   car &operator=(const car &) = default;
   car &operator=(car &&) = default;
-  virtual ~car() noexcept = default;
+  virtual ~car() = default;
 
-  virtual size_t vin() const noexcept = 0;
-  float max_speed() const noexcept;
+  virtual size_t vin() const = 0;
+  float max_speed() const;
   void speed(float speed);
-  float speed() const noexcept;
-  bool is_driving() const noexcept;
-  unsigned short horse_power() const noexcept;
-  float average_speed() const noexcept;
-  float weight() const noexcept;
-  const engine &engine() const noexcept;
+  float speed() const;
+  bool is_driving() const;
+  unsigned short horse_power() const;
+  float average_speed() const;
+  float weight() const;
+  const class engine &engine() const;
 
  private:
   class engine engine_;
