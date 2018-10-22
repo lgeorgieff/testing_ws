@@ -15,7 +15,8 @@ class bmw : public car {
   virtual ~bmw() noexcept = default;
 
   virtual size_t vin() const noexcept override = 0;
-
+  bool operator==(const bmw &other) const;
+  bool operator!=(const bmw &other) const;
  private:
   size_t vin_;
 };

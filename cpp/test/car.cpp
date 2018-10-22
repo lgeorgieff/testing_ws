@@ -1,3 +1,4 @@
+#include "utils/car_base_fixture.hpp"
 #include "../src/car.hpp"
 #include "../src/engine.hpp"
 
@@ -11,44 +12,7 @@
 const auto ms_500{std::chrono::milliseconds{500}};
 const auto ms_1000{std::chrono::milliseconds{1000}};
 
-class engine_mock : public testing_sample::engine {
- public:
-  engine_mock(float horse_power) noexcept :engine(horse_power) {}
-  MOCK_CONST_METHOD0(horse_power, unsigned short());
-}; // class engine_mock
-
-class car_mock : public testing_sample::car {
- public:
-  car_mock(const testing_sample::engine &engine, float max_speed, float weight) noexcept
-    :car{engine, max_speed, weight} {}
-  virtual size_t vin() const noexcept override {
-    return 123;
-  }
-}; // class car_mock
-
-class car_f : public ::testing::Test {
- public:
-  ~car_f() { TearDown(); }
-  void SetUp() {}
-  void TearDown() {}
-
-  static const float HORSE_POWER;
-  static const float MAX_SPEED;
-  static const float WEIGHT;
-
-  std::unique_ptr<testing_sample::engine> create_instance(float horse_power = HORSE_POWER) const {
-    return std::make_unique<engine_mock>(horse_power);
-  }
-
-  std::unique_ptr<testing_sample::car> create_instance(const testing_sample::engine &engine,
-      float max_speed = MAX_SPEED, float weight = WEIGHT) const {
-    return std::make_unique<car_mock>(engine, max_speed, weight);
-  }
-}; // class car_f
-
-const float car_f::HORSE_POWER = 323.0F;
-const float car_f::MAX_SPEED = 283.0F;
-const float car_f::WEIGHT = 1523.321F;
+class car_f : public car_base_fixture {};
 
 TEST_F(car_f, subclass_can_be_instantiated) {
   auto engine{create_instance()};

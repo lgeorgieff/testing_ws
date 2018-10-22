@@ -40,9 +40,14 @@ if(GENERATE_TESTS)
     include_directories(${GTEST_INCLUDE_DIRS})
 
     add_executable(testing_ws_unit_tests
+            test/utils/car_mock.hpp
+            test/utils/engine_mock.hpp
+            test/utils/car_base_fixture.hpp
             src/engine.cpp src/engine.hpp
             src/car.cpp src/car.hpp
-            test/car.cpp test/engine.cpp)
+            test/car.cpp test/engine.cpp
+            src/bmw.cpp src/bmw.hpp
+            test/bmw.cpp)
 
     add_test(NAME sample_test_suite COMMAND testing_ws_unit_tests)
     message(STATUS ${GTEST_BOTH_LIBRARIES})
