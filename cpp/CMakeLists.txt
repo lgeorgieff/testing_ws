@@ -47,10 +47,12 @@ if(GENERATE_TESTS)
             test/car.cpp
             test/bmw.cpp
             test/four_series.cpp
+            test/eight_series.cpp
             src/engine.cpp src/engine.hpp
             src/car.cpp src/car.hpp
             src/bmw.cpp src/bmw.hpp
-            src/four_series.cpp test/four_series.cpp)
+            src/four_series.cpp src/four_series.hpp
+            src/eight_series.cpp src/eight_series.hpp)
 
     add_test(NAME sample_test_suite COMMAND testing_ws_unit_tests)
     message(STATUS ${GTEST_BOTH_LIBRARIES})
