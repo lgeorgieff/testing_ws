@@ -1,6 +1,6 @@
 #include "four_series.hpp"
 
-testing_sample::four_series::four_series(const class engine &engine, float max_speed, float weight, size_t vin) noexcept
+testing_sample::four_series::four_series(const testing_sample::engine &engine, float max_speed, float weight, size_t vin)
     :bmw{engine, max_speed, weight, vin} {}
 
-size_t testing_sample::four_series::vin() const noexcept { return bmw::vin(); }
+size_t testing_sample::four_series::vin() const { return bmw::vin(); }

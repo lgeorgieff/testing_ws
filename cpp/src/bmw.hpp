@@ -7,14 +7,14 @@ namespace testing_sample {
 
 class bmw : public car {
  public:
-  bmw(const class engine &engine, float max_speed, float weight, size_t vin) noexcept;
-  bmw(const bmw &) noexcept = default;
+  bmw(const class engine &engine, float max_speed, float weight, size_t vin);
+  bmw(const bmw &) = default;
   bmw(bmw &&) noexcept = default;
-  bmw &operator=(const bmw &) noexcept = default;
-  bmw &operator=(bmw &&) noexcept = default;
-  virtual ~bmw() noexcept = default;
+  bmw &operator=(const bmw &) = default;
+  bmw &operator=(bmw &&) = default;
+  virtual ~bmw() = default;
 
-  virtual size_t vin() const noexcept override = 0;
+  virtual size_t vin() const override = 0;
   bool operator==(const bmw &other) const;
   bool operator!=(const bmw &other) const;
  private:

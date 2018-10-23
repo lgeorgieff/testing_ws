@@ -5,16 +5,16 @@ class bmw_manufacturer;
 
 class four_series : public bmw {
  public:
-  four_series(const four_series &) noexcept = default;
-  four_series(four_series &&) noexcept = default;
-  four_series &operator=(const four_series &) noexcept = default;
-  four_series &operator=(four_series &&) noexcept = default;
-  virtual ~four_series() noexcept = default;
+  four_series(const four_series &) = default;
+  four_series(four_series &&) = default;
+  four_series &operator=(const four_series &) = default;
+  four_series &operator=(four_series &&) = default;
+  virtual ~four_series() = default;
 
-  virtual size_t vin() const noexcept override;
+  virtual size_t vin() const override;
 
- private:
-  four_series(const class engine &engine, float max_speed, float weight, size_t vin) noexcept;
+ protected:
+  four_series(const testing_sample::engine &engine, float max_speed, float weight, size_t vin);
   friend bmw_manufacturer;
 };
 } // namespace testing_sample

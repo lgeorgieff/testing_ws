@@ -10,9 +10,9 @@
 
 class bmw_mock : public testing_sample::bmw {
  public:
-  bmw_mock(const testing_sample::engine &engine, float max_speed, float weight, size_t vin) noexcept
+  bmw_mock(const testing_sample::engine &engine, float max_speed, float weight, size_t vin)
       :bmw{engine, max_speed, weight, vin} {}
-  virtual size_t vin() const noexcept override {
+  virtual size_t vin() const override {
     return bmw::vin();
   }
 }; // class bmw_mock
@@ -32,6 +32,11 @@ class bmw_f : public car_base_fixture {
 TEST_F(bmw_f, subclass_can_be_instantiated) {
   auto bmw{create_instance(*create_instance())};
   EXPECT_TRUE(bmw);
+}
+
+TEST_F(bmw_f, vin_is_set) {
+  auto four_series{create_instance(*create_instance())};
+  EXPECT_EQ(four_series->vin(), VIN);
 }
 
 TEST_F(bmw_f, equals_operator_returns_correct_value) {
