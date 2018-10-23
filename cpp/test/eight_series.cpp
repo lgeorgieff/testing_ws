@@ -26,7 +26,7 @@ class eight_series_f : public car_base_fixture {
   }
 }; // class eight_series_f
 
-TEST_F(eight_series_f, subclass_can_be_instantiated) {
+TEST_F(eight_series_f, subclass_is_instantiated) {
   auto eight_series{create_instance(*create_instance())};
   EXPECT_TRUE(eight_series);
 }

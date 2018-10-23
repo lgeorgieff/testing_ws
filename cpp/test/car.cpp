@@ -14,7 +14,7 @@ const auto ms_1000{std::chrono::milliseconds{1000}};
 
 class car_f : public car_base_fixture {};
 
-TEST_F(car_f, subclass_can_be_instantiated) {
+TEST_F(car_f, subclass_is_instantiated) {
   auto engine{create_instance()};
   auto car{create_instance(*engine)};
   EXPECT_TRUE(car);

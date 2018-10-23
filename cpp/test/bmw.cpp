@@ -29,7 +29,7 @@ class bmw_f : public car_base_fixture {
   }
 }; // class bmw_f
 
-TEST_F(bmw_f, subclass_can_be_instantiated) {
+TEST_F(bmw_f, subclass_is_instantiated) {
   auto bmw{create_instance(*create_instance())};
   EXPECT_TRUE(bmw);
 }

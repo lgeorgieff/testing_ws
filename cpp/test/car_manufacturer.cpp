@@ -1,5 +1,4 @@
-#include "../src/four_series.hpp"
-#include "../src/four_series.hpp"
+#include "../src/car.hpp"
 #include "../src/car_manufacturer.hpp"
 #include "utils/car_manufacturer_mock.hpp"
 
@@ -21,12 +20,13 @@ class car_manufacturer_f : public ::testing::Test {
       const testing_sample::vin_pool &vin_pool = VIN_POOL) const {
     return std::make_unique<car_manufacturer_mock>(vin_pool);
   }
-}; // class car_base_fixture
+}; // class car_manufacturer_f
 
 const testing_sample::vin_pool car_manufacturer_f::VIN_POOL{1, 2, 3, 4};
 
-TEST_F(car_manufacturer_f, can_be_instantiated) {
+TEST_F(car_manufacturer_f, is_instantiated) {
   auto manufacturer{create_instance()};
+  EXPECT_TRUE(manufacturer);
   SUCCEED();
 }
 

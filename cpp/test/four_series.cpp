@@ -26,7 +26,7 @@ class four_series_f : public car_base_fixture {
   }
 }; // class four_series_f
 
-TEST_F(four_series_f, subclass_can_be_instantiated) {
+TEST_F(four_series_f, subclass_is_instantiated) {
   auto four_series{create_instance(*create_instance())};
   EXPECT_TRUE(four_series);
 }
