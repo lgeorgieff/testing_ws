@@ -1,3 +1,5 @@
+#pragma once
+
 #include "bmw.hpp"
 
 namespace testing_sample {

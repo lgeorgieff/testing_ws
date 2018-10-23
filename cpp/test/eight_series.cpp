@@ -11,7 +11,7 @@ class eight_series_mock : public testing_sample::eight_series {
  public:
   eight_series_mock(const testing_sample::engine &engine, float max_speed, float weight, size_t vin)
       :eight_series{engine, max_speed, weight, vin} {}
-}; // class four_series_mock
+}; // class eight_series_mock
 
 class eight_series_f : public car_base_fixture {
  public:
@@ -24,7 +24,7 @@ class eight_series_f : public car_base_fixture {
                                                                float weight = WEIGHT, size_t vin = VIN) const override {
     return std::make_unique<eight_series_mock>(engine, max_speed, weight, vin);
   }
-}; // class four_series_f
+}; // class eight_series_f
 
 TEST_F(eight_series_f, subclass_can_be_instantiated) {
   auto eight_series{create_instance(*create_instance())};
