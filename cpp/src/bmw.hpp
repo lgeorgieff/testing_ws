@@ -9,7 +9,7 @@ class bmw : public car {
  public:
   bmw(const class engine &engine, float max_speed, float weight, size_t vin);
   bmw(const bmw &) = default;
-  bmw(bmw &&) noexcept = default;
+  bmw(bmw &&) = default;
   bmw &operator=(const bmw &) = default;
   bmw &operator=(bmw &&) = default;
   virtual ~bmw() = default;

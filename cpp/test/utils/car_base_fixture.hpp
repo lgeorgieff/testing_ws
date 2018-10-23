@@ -8,6 +8,7 @@
 #include <gmock/gmock.h>
 
 #include <cstddef>
+#include <memory>
 
 const float HORSE_POWER{323.0F};
 const float MAX_SPEED{283.0F};

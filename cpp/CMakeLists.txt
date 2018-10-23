@@ -43,16 +43,21 @@ if(GENERATE_TESTS)
             test/utils/car_mock.hpp
             test/utils/engine_mock.hpp
             test/utils/car_base_fixture.hpp
+            test/utils/car_manufacturer_mock.hpp
             test/engine.cpp
             test/car.cpp
             test/bmw.cpp
             test/four_series.cpp
             test/eight_series.cpp
+            test/car_manufacturer.cpp
+            src/eight_series.hpp test/bmw_manufacturer.cpp
             src/engine.cpp src/engine.hpp
             src/car.cpp src/car.hpp
             src/bmw.cpp src/bmw.hpp
             src/four_series.cpp src/four_series.hpp
-            src/eight_series.cpp src/eight_series.hpp)
+            src/eight_series.cpp src/eight_series.hpp
+            src/car_manufacturer.cpp src/car_manufacturer.hpp
+            src/bmw_manufacturer.cpp src/bmw_manufacturer.hpp)
 
     add_test(NAME sample_test_suite COMMAND testing_ws_unit_tests)
     message(STATUS ${GTEST_BOTH_LIBRARIES})
