@@ -1,0 +1,52 @@
+@startuml
+
+class engine {
+  +horse_power() const: unsigned short
+}
+
+abstract class car {
+  +virtual vin() const: size_t = 0
+  +max_speed() const: float
+  +speed(speed: float): void
+  +speed() const: float
+  +is_driving() const: bool
+  +horse_power() const: unsigned short
+  +average_speed() const: float
+  +weight() const: float
+  +engine() const: const engine &
+  +operator==(other: const engine &) const: bool
+  +operator!=(other: const engine &) const: bool
+}
+
+abstract class bmw {
+  +virtual vin() const: size_t = 0
+  +operator==(other: const bmw &) const: bool
+  +operator!=(other: const bmw &) const: bool
+}
+
+class four_series {
+  +virtual vin() const: size_t
+}
+
+class eight_series {
+  +virtual vin() const: size_t
+}
+
+abstract class car_manufacturer {
+  +virtual create(config: const car_config &): std::unique_ptr<car> = 0
+  #next_vin(): size_t
+}
+
+class bmw_manufacturer {
+  +virtual create(config: const car_config &): std::unique_ptr<car>
+}
+
+car o-- engine
+car <|-- bmw
+bmw <|-- four_series
+bmw <|-- eight_series
+car_manufacturer <|-- bmw_manufacturer
+car_manufacturer .. car
+bmw_manufacturer .. bmw
+
+@enduml
