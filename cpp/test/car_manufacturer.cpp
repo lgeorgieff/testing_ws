@@ -43,3 +43,9 @@ TEST_F(car_manufacturer_f, create_fails_if_no_vin_available) {
   for(size_t i{0}; i < VIN_POOL.size(); ++i) manufacturer->create(config);
   EXPECT_THROW(manufacturer->create(config), std::length_error);
 }
+
+TEST_F(car_manufacturer_f, cannot_create_car_with_empty_vin_pool) {
+  auto manufacturer{create_instance({})};
+  testing_sample::car_config config{};
+  EXPECT_THROW(manufacturer->create(config), std::length_error);
+}
